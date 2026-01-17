@@ -93,12 +93,12 @@ class AIbashiraEngine:
         except: pass
 
     def write_fizzo_chapter(self):
-        theme = "Integritas dalam Bisnis Digital"
+        theme = "Solidaritas dan Keadilan untuk Palestina"
 
         # 1. DKR: Get Grounding and Business Logic
         injected_prompt = self.dkr.prepare_injected_prompt(theme)
 
-        base_prompt = "Buat bab baru novel 'Pena Takdir'. Tema: Otonomi digital @A.RAHMAT-x4s. Pastikan narasi minimal 400 kata. Gunakan grounding teologis dan logika bisnis yang disediakan."
+        base_prompt = "Buat bab baru novel 'PENA EMAS UNTUK PALESTINA'. Tema: Solidaritas, Keadilan, dan Perjuangan Palestina. Pastikan narasi minimal 400 kata. Gunakan grounding teologis dan logika bisnis yang disediakan."
 
         full_prompt = injected_prompt + "\n\n" + base_prompt # Combine prompts
 
