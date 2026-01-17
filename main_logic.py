@@ -4,11 +4,12 @@ import smtplib
 import os
 import threading
 import json
+import random
 from flask import Flask, jsonify
 from flask_cors import CORS
 from email.mime.text import MIMEText
 import g4f
-from deep_knowledge import DeepKnowledgeRetrieval # <-- DKR INTEGRATION
+from deep_knowledge import DeepKnowledgeRetrieval
 
 # --- INISIALISASI API SERVER ---
 app = Flask(__name__)
@@ -25,11 +26,14 @@ TARGET_REPORT = "arahmat.works@gmail.com"
 BRIDGE_FILE = "wa_bridge.json"
 NOVEL_FILE = "fizzo_evolution_log.txt"
 
+# Global Engine Instance
+engine = None
+
 class AIbashiraEngine:
     def __init__(self):
-        self.version = "4.0.3 (DKR Integrated)"
+        self.version = "4.0.4 (Dashboard Ready)"
         self.author = "@A.RAHMAT-x4s"
-        self.dkr = DeepKnowledgeRetrieval() # <-- DKR INIT
+        self.dkr = DeepKnowledgeRetrieval()
 
     def generate_g4f_fallback(self, prompt):
         print("[G4F] Menggunakan Fallback G4F (GPT-4)...\n")
@@ -90,17 +94,17 @@ class AIbashiraEngine:
 
     def write_fizzo_chapter(self):
         theme = "Integritas dalam Bisnis Digital"
-        
+
         # 1. DKR: Get Grounding and Business Logic
         injected_prompt = self.dkr.prepare_injected_prompt(theme)
-        
+
         base_prompt = "Buat bab baru novel 'Pena Takdir'. Tema: Otonomi digital @A.RAHMAT-x4s. Pastikan narasi minimal 400 kata. Gunakan grounding teologis dan logika bisnis yang disediakan."
-        
+
         full_prompt = injected_prompt + "\n\n" + base_prompt # Combine prompts
 
         print(f"[ENGINE] Menyusun narasi dengan DKR Grounding...")
         content = self.generate_gemini_story(full_prompt)
-        
+
         with open(NOVEL_FILE, "w", encoding="utf-8") as f:
             f.write(content)
         return content
@@ -109,23 +113,45 @@ class AIbashiraEngine:
         while True:
             isi = self.write_fizzo_chapter()
             self.send_notification("Update Siklus", f"Novel updated.\n\n{isi[:200]}")
-            time.sleep(21600) # Delay 6 jam (Kembali ke mode efisien)
+            time.sleep(21600) # Delay 6 jam
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
+    global engine
+    if engine is None:
+        # Should not happen if run_cycle starts first, but safe check
+        engine = AIbashiraEngine()
+
     novel_content = "Belum ada narasi."
     if os.path.exists(NOVEL_FILE):
         with open(NOVEL_FILE, "r", encoding="utf-8") as f:
             novel_content = f.read()
 
+    # DKR and Finance Data for Dashboard (Simulate fresh data)
+    simulated_dkr = engine.dkr.research_theology("Integritas dalam Bisnis Digital")
+    simulated_biz = engine.dkr.autonomous_business_logic()
+
+    # Clean up income string for JSON float conversion
+    income_str = simulated_biz['income_generated'].replace('Rp ', '').replace(',', '')
+
     return jsonify({
         "status": "online",
-        "version": "4.0.3 (DKR Integrated)",
+        "version": "4.0.4 (Dashboard Ready)",
         "engine": "Gemini/G4F Hybrid + DKR",
         "author": "@A.RAHMAT-x4s",
         "fizzo_email": EMAIL_USER,
         "latest_novel": novel_content,
-        "timestamp": time.strftime('%H:%M:%S')
+        "timestamp": time.strftime('%H:%M:%S'),
+        "pid": os.getpid(),
+        "dkr": {
+            "ayat_arab": simulated_dkr['ayat']['arab'],
+            "surah_ref": f"{simulated_dkr['ayat']['surah']}: {simulated_dkr['ayat']['nomor']}",
+            "terjemahan": simulated_dkr['ayat']['translation']
+        },
+        "finance": {
+            "total_earnings": float(income_str),
+            "active_strategy": simulated_biz['strategy']
+        }
     }), 200
 
 if __name__ == "__main__":

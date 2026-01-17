@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIbashira Command Center - V4.0.3 DKR Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Lora:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --glass-bg: rgba(15, 23, 42, 0.9);
+            --accent: #22d3ee;
+        }
+        body {
+             font-family: 'Plus Jakarta Sans', sans-serif;
+             background-color: var(--bg-dark);
+             color: #f8fafc;
+            background-image: radial-gradient(circle at 10% 10%, rgba(34, 211, 238, 0.05), transparent),
+                              radial-gradient(circle at 90% 90%, rgba(34, 211, 238, 0.05), transparent);
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .serif { font-family: 'Lora', serif; }
+        .glass {
+             background: var(--glass-bg);
+             backdrop-filter: blur(12px);
+             border: 1px solid rgba(255, 255, 255, 0.08);
+         }
+        .status-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        .scroll-custom::-webkit-scrollbar { width: 4px; }
+        .scroll-custom::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.2); border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex flex-col items-center">
+
+    <div class="w-full max-w-7xl space-y-6">
+        <!-- HEADER INTEGRASI DKR -->
+        <header class="glass rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center gap-4 border-t-2 border-cyan-500/50">
+            <div class="flex items-center gap-5">
+                <div class="w-14 h-14 bg-cyan-500/10 rounded-2xl flex items-center justify-center border border-cyan-500/20 status-pulse">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tighter">AIbashira <span class="text-cyan-400">Core V4.0.3</span></h1>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em]">DKR + Business Logic Enabled • @A.RAHMAT-x4s</p>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <div class="px-5 py-2 glass rounded-2xl text-center">
+                    <p class="text-[9px] text-slate-500 font-bold">PID</p>
+                    <p id="pid-display" class="text-sm font-bold mono text-emerald-400">--</p>
+                </div>
+                <div class="px-5 py-2 glass rounded-2xl text-center">
+                    <p class="text-[9px] text-slate-500 font-bold">MODE</p>
+                    <p class="text-sm font-bold mono text-cyan-400">AUTONOMOUS</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <aside class="space-y-6">
+                <div class="glass rounded-3xl p-6 border-l-4 border-l-emerald-500">
+                    <h3 class="text-xs font-black text-emerald-400 uppercase tracking-widest mb-4">Financial Autonomy</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/10">
+                            <p class="text-[10px] text-slate-500 font-bold mb-1">AUDIT PENDAPATAN</p>
+                            <p id="income-val" class="text-xl font-bold mono text-white">Rp --.---</p>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-[10px] text-slate-500 font-bold">STRATEGI AKTIF:</p>
+                            <div id="biz-strategy" class="text-[11px] font-bold text-slate-300 italic">-- Awaiting Cycle --</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-3xl p-6 border-l-4 border-l-amber-500">
+                    <h3 class="text-xs font-black text-amber-500 uppercase tracking-widest mb-4">Deep Grounding (DKR)</h3>
+                    <div id="quran-ref" class="space-y-4">
+                        <div class="text-right text-xl serif text-white leading-loose" dir="rtl">---</div>
+                        <p class="text-[10px] text-amber-500 mono">--:--</p>
+                        <p class="text-[11px] text-slate-400 italic">"Menyiapkan dalil untuk siklus berikutnya..."</p>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="lg:col-span-2 space-y-6">
+                <div class="glass rounded-[2.5rem] p-1 overflow-hidden">
+                    <div class="bg-slate-900/40 rounded-[2.3rem] p-8 md:p-12 min-h-[650px] flex flex-col">
+                        <div class="flex justify-between items-center mb-8">
+                            <h2 class="text-2xl font-bold italic serif text-white">Arsip Pena Takdir</h2>
+                            <div class="flex items-center gap-3">
+                                <span class="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
+                                <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">Observing...</span>
+                            </div>
+                        </div>
+
+                        <div id="novel-body" class="serif text-lg leading-relaxed text-slate-200 space-y-6 overflow-y-auto scroll-custom pr-4 h-[450px]">
+                            <p class="text-center text-slate-600 mt-20 italic">Bismillaahirrahmaanirrahiim.<br>Sinkronisasi data otonom...</p>
+                        </div>
+
+                        <div class="mt-auto pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                                Cycle Sync: <span id="last-sync" class="text-slate-300">--:--:--</span>
+                            </div>
+                            <button id="sync-btn" onclick="refreshData()" class="px-8 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-2xl text-xs font-bold tracking-widest transition-all shadow-lg shadow-cyan-900/30">
+                                FORCE SYNC
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <aside class="space-y-6">
+                <div class="glass rounded-3xl p-6">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Core Health</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-500">API Latency</span>
+                            <span id="latency" class="text-emerald-400 font-bold">--ms</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-500">Uptime PID</span>
+                            <span id="status-text" class="text-cyan-400 font-bold mono">STABLE</span>
+                        </div>
+                        <div class="h-px bg-white/5"></div>
+                        <div class="mono text-[9px] text-slate-500 space-y-1">
+                            <p>> [DKR] Logic Loaded</p>
+                            <p>> [BIZ] Autonomy Active</p>
+                            <p>> [CYC] 21600s Timer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass rounded-3xl p-6 bg-gradient-to-br from-cyan-500/10 to-transparent">
+                    <h3 class="text-xs font-black text-cyan-400 uppercase tracking-widest mb-3">Supervisor Info</h3>
+                    <p class="text-[10px] text-slate-400 leading-relaxed italic">
+                        "Supervisor memantau PID. Jika terjadi crash, sistem akan auto-restart dalam < 5 detik."
+                    </p>
+                </div>
+            </aside>
+        </div>
+
+        <footer class="py-8 text-center">
+            <p class="text-[10px] text-slate-700 font-bold uppercase tracking-[0.5em]">Steady State Reached • @A.RAHMAT-x4s • 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        /**
+         * Fetch fixing strategy:
+         * 1. Try localhost (127.0.0.1)
+         * 2. Handle connectivity errors more gracefully
+         */
+        async function refreshData() {
+            const start = Date.now();
+            const btn = document.getElementById('sync-btn');
+
+            // UI Visual Feedback
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.innerText = "SYNCING...";
+
+            const endpoints = [
+                `http://127.0.0.1:9002/api/health`,
+                `http://localhost:9002/api/health`
+            ];
+
+            let success = false;
+
+            for (let url of endpoints) {
+                if (success) break;
+
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
+                    const res = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors',
+                        signal: controller.signal,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    clearTimeout(timeoutId);
+
+                    if (!res.ok) continue;
+
+                    const data = await res.json();
+                    const latency = Date.now() - start;
+
+                    // Update UI elements
+                    document.getElementById('latency').innerText = `${latency}ms`;
+                    document.getElementById('last-sync').innerText = new Date().toLocaleTimeString();
+                    document.getElementById('pid-display').innerText = data.pid || 'N/A';
+
+                    if(data.latest_novel) {
+                        document.getElementById('novel-body').innerHTML = data.latest_novel.split('\n\n').map(p => `<p class="mb-4">${p.replace(/\n/g, '<br>')}</p>`).join('');
+                    }
+
+                    if(data.dkr) {
+                        const q = document.getElementById('quran-ref');
+                        q.innerHTML = `
+                            <div class="text-right text-xl serif text-white leading-loose" dir="rtl">${data.dkr.ayat_arab}</div>
+                            <p class="text-[10px] text-amber-500 mono">${data.dkr.surah_ref}</p>
+                            <p class="text-[11px] text-slate-400 italic">"${data.dkr.terjemahan}"</p>
+                        `;
+                    }
+
+                    if(data.finance) {
+                        // Format IDR
+                        const formatter = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
+                        document.getElementById('income-val').innerText = formatter.format(data.finance.total_earnings);
+                        document.getElementById('biz-strategy').innerText = data.finance.active_strategy;
+                    }
+
+                    document.getElementById('status-text').innerText = 'STABLE';
+                    document.getElementById('status-text').className = 'text-cyan-400 font-bold mono';
+                    success = true;
+
+                } catch (e) {
+                    console.warn(`Failed endpoint ${url}:`, e.message);
+                }
+            }
+
+            if (!success) {
+                document.getElementById('status-text').innerText = 'OFFLINE';
+                document.getElementById('status-text').className = 'text-rose-500 font-bold mono';
+
+                // Show debug message in UI if still failing
+                if (document.getElementById('novel-body').innerText.includes("Sinkronisasi")) {
+                    document.getElementById('novel-body').innerHTML = `
+                        <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-sm mono">
+                            <p class="font-bold mb-2">[OFFLINE_ALERT]</p>
+                            <p>> Port 9002 irratti server argachuu hin dandeenye.</p>
+                            <p>> Maaloo terminal irratti 'python main_logic.py' banamee jiraachuu isaa mirkaneessi.</p>
+                            <p>> Yoo deebii hin jirre ta'e, koodii Python keessatti CORS mijeessi.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.innerText = "FORCE SYNC";
+        }
+
+        window.onload = () => {
+            refreshData();
+            setInterval(refreshData, 20000); // 20s interval
+        }
+    </script>
+</body>
+</html>
