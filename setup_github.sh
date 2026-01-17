@@ -10,7 +10,7 @@ echo -e "\e[96m[1/4] Memastikan Git Initialized...\e[0m"
 git init
 
 echo -e "\e[96m[2/4] Membuat Repository di GitHub via GH-CLI...\e[0m"
-# Membuat repo di cloud langsung dari terminal
+# Mencoba membuat repo di cloud langsung dari terminal
 gh repo create $GITHUB_USER/$REPO_NAME --public --source=. --remote=origin --push
 
 # Fallback jika repo sudah ada atau gagal dibuat
@@ -25,7 +25,7 @@ git branch -M main
 
 echo -e "\e[96m[4/4] Sinkronisasi Final...\e[0m"
 git add .
-git commit -m "Bismillaah: Initializing AIbashira Autonomous Core" || echo "[INFO] Nothing new to commit."
+git commit -m "Bismillaah: Finalizing GitHub Setup" || echo "[INFO] Nothing new to commit."
 git push -u origin main
 
 echo -e "\e[92m[SUCCESS] Repository $REPO_NAME telah aktif dan terhubung!\e[0m"
